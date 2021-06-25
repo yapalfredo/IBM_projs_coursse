@@ -9,8 +9,8 @@ from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 """
 API KEY AND URL
 """
-URL_S2T = "https://api.us-south.language-translator.watson.cloud.ibm.com/instances/33e67af5-694f-4873-ad2e-34ba662c55d3"
-IAM_APIKEY_S2T = "y1v56Z3o3w94zmKP3bxc_uRH0A7WWQD0Z76z5oYcI3gY"
+URL_S2T = ""
+IAM_APIKEY_S2T = ""
 
 authenticator = IAMAuthenticator(IAM_APIKEY_S2T)
 language_translator = LanguageTranslatorV3(
