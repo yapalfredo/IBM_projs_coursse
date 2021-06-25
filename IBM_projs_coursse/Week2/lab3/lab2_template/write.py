@@ -31,6 +31,29 @@ def write_instructors():
     instructor_peter.save()
     print("Instructor objects all saved... ")
 
+def write_learners():
+    # Add Learners
+    learner_james = Learner(first_name='James', last_name='Smith', dob=date(1982, 7, 16),
+                            occupation='data_scientist',
+                            social_link='https://www.linkedin.com/james/')
+    learner_james.save()
+    learner_mary = Learner(first_name='Mary', last_name='Smith', dob=date(1991, 6, 12), occupation='dba',
+                           social_link='https://www.facebook.com/mary/')
+    learner_mary.save()
+    learner_robert = Learner(first_name='Robert', last_name='Lee', dob=date(1999, 1, 2), occupation='student',
+                             social_link='https://www.facebook.com/robert/')
+    learner_robert.save()
+    learner_david = Learner(first_name='David', last_name='Smith', dob=date(1983, 7, 16),
+                            occupation='developer',
+                            social_link='https://www.linkedin.com/david/')
+    learner_david.save()
+    learner_john = Learner(first_name='John', last_name='Smith', dob=date(1986, 3, 16),
+                           occupation='developer',
+                           social_link='https://www.linkedin.com/john/')
+    learner_john.save()
+    print("Learner objects all saved... ")
+
+
 def write_courses():
     # Add Courses
     course_cloud_app = Course(name="Cloud Application Development with Database",
@@ -65,3 +88,4 @@ clean_data()
 write_instructors()
 write_courses()
 write_lessons()
+write_learners()

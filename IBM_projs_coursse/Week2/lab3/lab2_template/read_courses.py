@@ -12,3 +12,5 @@ from datetime import date
 
 
 # Your code starts from here:
+courses = Course.objects.all()
+print(courses)

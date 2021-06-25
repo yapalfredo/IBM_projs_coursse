@@ -9,7 +9,7 @@ from django.utils.translation import to_language
 class User(models.Model):
     first_name = models.CharField(null=False, max_length=30, default='john')
     last_name = models.CharField(null=False, max_length=30, default='doe')
-    dob = models.CharField(null=True, max_length=30)
+    dob = models.CharField(null=True, max_length=10)
 
     #Create a tostring method for object string representation
     def __str__(self):
