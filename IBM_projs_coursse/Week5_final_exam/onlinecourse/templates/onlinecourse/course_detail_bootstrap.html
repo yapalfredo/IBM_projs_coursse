@@ -28,7 +28,7 @@
                         {% csrf_token %}
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="Username" name="username" >
-                            <input type="password" class="form-control" placeholder="Username" name="psw" >
+                            <input type="password" class="form-control" placeholder="Password" name="psw" >
                             <button class="btn btn-primary" type="submit">Login</button>
                             <a class="btn btn-link" href="{% url 'onlinecourse:registration' %}">Sign Up</a>
                         </div>
@@ -42,14 +42,6 @@
     <!-- Page content -->
     <div class="container-fluid">
             <h2>{{ course.name }}</h2>
-            <div class="card-columns-vertical">
-                {% for lesson in course.lesson_set.all %}
-                    <div class="card mt-1">
-                        <div class="card-header"><h5>Lesson {{lesson.order|add:1}}: {{lesson.title}}</h5></div>
-                        <div class="card-body">{{lesson.content}}</div>
-                    </div>
-                {% endfor %}
-            </div>
             <!-- Task: show questions and choices -->
             <!-- <HINT> Use Bootstrap Collapse to hide exam first, more details could be found here
             https://www.w3schools.com/bootstrap4/bootstrap_collapse.asp-->
@@ -73,18 +65,19 @@
             -->
 
             <!-- A choice submission form example-->
-            <form id="questionform" action="point to a submit view" method="post">
+            <form id="questionform" action="{% url 'onlinecourse:submit' course.id %}" method="post">
             <input type="button" class="btn btn-block" value="Start Exam" style="background-color:#32a3b8;color:white">
-                         <!--... for each question in the course ...-->
-                        {% for question in course.question_set.all %}
+                        <!--... for each question in the course ...-->
+                        {% for question in course.question_set.all|dictsort:"lesson.order" %}
                         <div class="card mt-1">
                             <div class="card-header"><h5>{{ question.question_text}}</h5></div>
                             {% csrf_token %}
                             <div class="form-group">
+                            <!--... for each choice in the question  choice_{{choice.id}}...-->
                               {% for choice in question.choice_set.all %}
                                 <div class="form-check">
                                     <label class="form-check-label">
-                                        <input type="checkbox" name="choice_{{choice.id}}"
+                                        <input type="checkbox" name="choice"
                                                class="form-check-input" id="{{choice.id}}"
                                                value="{{choice.id}}">{{ choice.choice_text }}
                                     </label>
@@ -96,6 +89,14 @@
                     <input class="btn btn-success btn-block" type="submit" value="Submit">
             </form>
         {% else %}
+        <div class="card-columns-vertical">
+            {% for lesson in course.lesson_set.all|dictsort:"order" %}
+                <div class="card mt-1">
+                    <div class="card-header"><h5>Lesson {{lesson.order|add:1}}: {{lesson.title}}</h5></div>
+                    <div class="card-body">{{lesson.content}}</div>
+                </div>
+            {% endfor %}
+        </div>
         <div id="exam" class="collapse">
         </div>
         {% endif %} 

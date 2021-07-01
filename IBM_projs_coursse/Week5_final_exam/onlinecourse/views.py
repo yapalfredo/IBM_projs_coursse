@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views import generic
 from django.contrib.auth import login, logout, authenticate
-import logging
+import logging, json
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 # Create your views here.
@@ -110,7 +110,18 @@ def enroll(request, course_id):
          # Collect the selected choices from exam form
          # Add each selected choice object to the submission object
          # Redirect to show_exam_result with the submission id
-#def submit(request, course_id):
+def submit(request, course_id):
+    context = {}
+    if request.method == 'POST':
+        enrollment_ = Enrollment.objects.get(user = request.user, course = course_id)
+        submission_ = Submission.objects.create(enrollment = enrollment_)
+        checkboxs = request.POST.getlist('choice')
+        for c in checkboxs:
+            submission_.choices.set(c)
+
+        return HttpResponseRedirect(reverse(viewname='onlinecourse:course_details', args=(course_id,)))
+
+
 
 
 # <HINT> A example method to collect the selected choices from the exam form from the request object
