@@ -111,21 +111,21 @@ def enroll(request, course_id):
          # Add each selected choice object to the submission object
          # Redirect to show_exam_result with the submission id
 def submit(request, course_id):
-    context = {}
     if request.method == 'POST':
+        #Fetch enrollment object based on user and course id
         enrollment_ = Enrollment.objects.get(user = request.user, course = course_id)
+        #Creates a submission obeject based on the enrollment_
         submission_ = Submission.objects.create(enrollment = enrollment_)
-        checkboxs = request.POST.getlist('choice')
-        for c in checkboxs:
-            submission_.choices.set(c)
+        submission_id = submission_.pk
+        #Gets all checkboxes and extract their choice id 
+        checkboxes = request.POST.getlist('choice')
+        for checkbox in checkboxes:
+            submission_.choices.add(checkbox)
 
-        return HttpResponseRedirect(reverse(viewname='onlinecourse:course_details', args=(course_id,)))
-
-
-
+        return HttpResponseRedirect(reverse(viewname='onlinecourse:show_exam_result', args=(course_id, submission_id)))
 
 # <HINT> A example method to collect the selected choices from the exam form from the request object
-#def extract_answers(request):
+# def extract_answers(request):
 #    submitted_anwsers = []
 #    for key in request.POST:
 #        if key.startswith('choice'):
@@ -141,7 +141,19 @@ def submit(request, course_id):
         # Get the selected choice ids from the submission record
         # For each selected choice, check if it is a correct answer or not
         # Calculate the total score
-#def show_exam_result(request, course_id, submission_id):
+def show_exam_result(request, course_id, submission_id):
+    context = {}
+    course_ = Course.objects.get(id = course_id)
+    submission_ = Submission.objects.get(id = submission_id)
+
+    score = 0
+    for i in submission_.choices.all().filter(is_correct=True).values_list('question_id'):
+        score = score + Question.objects.filter(id=i[0]).first().grade
+    
+    context['score'] = score
+    context['course'] = course_
+
+    return  render(request, 'onlinecourse/exam_result_bootstrap.html', context)
 
 
 
